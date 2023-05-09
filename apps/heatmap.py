@@ -77,7 +77,7 @@ low_res_image = preprocess_image(low_res_image_path)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 saved_model = SRCNN().to(device)
-saved_model.load_state_dict(torch.load('Bioimaging_data3/model.pth'))
+saved_model.load_state_dict(torch.load('Bioimaging_data3/model.pth',map_location=torch.device('cpu')))
 
 with torch.no_grad():
     saved_model.eval()
