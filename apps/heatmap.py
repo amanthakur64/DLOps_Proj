@@ -111,7 +111,7 @@ plt.show()
 
 def app():
 
-    st.title("Model 1")
+    st.title("Super Resolution CNN")
 
     st.subheader("This is our DL Ops Project")
     image=Image.open("outpucnn.png")
@@ -119,6 +119,7 @@ def app():
 
     uploaded_file = st.file_uploader("", type=['jpg','png','jpeg'])
     if uploaded_file is not None:
+        print(uploaded_file.name)
         low_res_image = preprocess_image(uploaded_file)
 
         with torch.no_grad():

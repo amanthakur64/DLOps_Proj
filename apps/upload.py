@@ -231,7 +231,7 @@ a=plt.imshow(sreeni_hr[0,:,:,:])
 def app():
     
     st.title("SRGAN")
-    st.write("Super Resolution Generative Adversarial Network")
+    st.subheader("Super Resolution Generative Adversarial Network")
     image=Image.open("srgan.png")
     st.image(image,caption="SRGAN",use_column_width=True)
 
