@@ -1,6 +1,7 @@
 import streamlit as st
 import leafmap.foliumap as leafmap
 from PIL import Image
+from io import StringIO
 
 import torch
 import matplotlib
@@ -120,7 +121,14 @@ def app():
     uploaded_file = st.file_uploader("", type=['jpg','png','jpeg'])
     if uploaded_file is not None:
         print(uploaded_file.name)
-        low_res_image = preprocess_image(uploaded_file)
+        st.image(uploaded_file,caption="Uploaded Image")
+        bytes_data = uploaded_file.getvalue()
+        img = cv2.imdecode(np.frombuffer(bytes_data, np.uint8), -1)
+        low_res_image = cv2.resize(img, (64, 64), cv2.INTER_CUBIC)
+        low_res_image = low_res_image.astype('float32') / 255
+        low_res_image = np.expand_dims(low_res_image, axis=0)
+        low_res_image = torch.from_numpy(low_res_image)
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         with torch.no_grad():
             saved_model.eval()
@@ -132,18 +140,17 @@ def app():
             output = np.clip(output, 0, 255)
             output = output.astype('uint8')
 
-        low_res_image_display = cv2.imread(uploaded_file)
-        low_res_image_display = cv2.cvtColor(low_res_image_display, cv2.COLOR_BGR2RGB)
+        low_res_image_display = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
         output_display = cv2.cvtColor(output, cv2.COLOR_RGB2BGR)
-        fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+        fig, axs = plt.subplots(1, 2, figsize=(15, 5))
         axs[0].imshow(low_res_image_display)
         axs[0].set_title('Low Resolution')
         # axs[2].imshow(high_res_image,cmap="gray")
         # axs[2].set_title('High Resolution')
         axs[1].imshow(output_display)
         axs[1].set_title('Predicted')
-        plt.show()
+        st.pyplot(fig)
 
 
 
