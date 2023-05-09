@@ -26,6 +26,13 @@ import os
 from torchvision.utils import save_image
 
 from torch.utils.data import DataLoader, Dataset
+import requests
+from streamlit_lottie import st_lottie
+
+def load_animation(url):
+    r=requests.get(url)
+    return r.json()
+
 
 
 
@@ -112,9 +119,12 @@ plt.show()
 
 def app():
 
-    st.title("Super Resolution CNN")
+    st.title("Super Resolution Convolutional Neural Network")
+    lottie=load_animation("https://assets5.lottiefiles.com/private_files/lf30_8npirptd.json")
 
-    st.subheader("This is our DL Ops Project")
+    st_lottie(lottie,height=300,width=400,quality='high',key="initial")
+
+    st.subheader("Our project aims to demonstrate that the traditional pipeline used for single-image super-resolution is equivalent to a deep convolutional neural network. Motivated by this insight, we propose a model that utilizes a convolutional neural network to directly learn the mapping between low- and high-resolution images in an end-to-end manner. The method used in our project differs from existing approaches as it does not rely on explicitly learning dictionaries or manifolds to model the patch space. Instead, these are implicitly achieved through hidden layers. Additionally, our approach formulates patch extraction and aggregation as convolutional layers, which are incorporated into the optimization process. With our method, the entire super-resolution pipeline is learned through training, with minimal pre- or post-processing required. We refer to our proposed model as the Super-Resolution Convolutional Neural Network (SRCNN).")
     image=Image.open("outpucnn.png")
     st.image(image,caption="CNN",use_column_width=True)
 
@@ -150,7 +160,10 @@ def app():
         # axs[2].set_title('High Resolution')
         axs[1].imshow(output_display)
         axs[1].set_title('Predicted')
-        st.pyplot(fig)
+
+        ok2 = st.button("See Prediction")
+        if ok2:
+            st.pyplot(fig)
 
 
 

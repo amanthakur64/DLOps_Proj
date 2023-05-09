@@ -10,9 +10,16 @@ from keras import Model
 from keras.layers import Conv2D, PReLU,BatchNormalization, Flatten
 from keras.layers import UpSampling2D, LeakyReLU, Dense, Input, add
 from tqdm import tqdm
-
+import time
 from keras.models import load_model
 from numpy.random import randint
+import requests
+from streamlit_lottie import st_lottie
+
+def load_animation(url):
+    r=requests.get(url)
+    return r.json()
+
 
 #Define blocks to build the generator
 def res_block(ip):
@@ -230,10 +237,22 @@ a=plt.imshow(sreeni_hr[0,:,:,:])
 
 def app():
     
-    st.title("SRGAN")
-    st.subheader("Super Resolution Generative Adversarial Network")
-    image=Image.open("srgan.png")
-    st.image(image,caption="SRGAN",use_column_width=True)
+    st.title("Super Resolution Generative Adversarial Network")
+    lottie=load_animation("https://assets4.lottiefiles.com/packages/lf20_ryg8FvK2iZ.json")
+
+    st_lottie(lottie,height=300,width=400,quality='high',key="tempo")
+    st.subheader('''A Super Resolution Generative Adversarial Network (SRGAN) is a deep learning model that is used for image super-resolution, which refers to the process of increasing the resolution and quality of low-resolution images. SRGANs use a combination of two neural networks: a generator network and a discriminator network.
+
+The generator network takes a low-resolution image as input and generates a high-resolution image as output. The discriminator network evaluates the quality of the generated image and provides feedback to the generator, which helps it to improve the quality of its output.
+
+The two networks are trained in an adversarial manner, where the generator tries to produce high-quality images that can fool the discriminator, and the discriminator tries to distinguish between the generated images and real high-resolution images.
+
+SRGANs have achieved state-of-the-art performance in image super-resolution tasks and have been applied in various fields, such as medical imaging, remote sensing, and video processing.''')
+    ok3=st.button("Click here to compute SRGAN Result") 
+    if ok3:
+        time.sleep(3)
+        image=Image.open("srgan.png")
+        st.image(image,caption="SRGAN",use_column_width=True)
 
 
     # m = leafmap.Map()

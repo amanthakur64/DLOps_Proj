@@ -1,16 +1,21 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 from apps import home, heatmap, upload  # import your app modules here
+import requests
 
 st.set_page_config(page_title="DL Ops Project", layout="wide")
+
+def load_animation(url):
+    r=requests.get(url)
+    return r.json()
 
 # A dictionary of apps in the format of {"App title": "App icon"}
 # More icons can be found here: https://icons.getbootstrap.com
 
 apps = [
     {"func": home.app, "title": "Home", "icon": "house"},
-    {"func": heatmap.app, "title": "SRCNN", "icon": "1-circle"},
-    {"func": upload.app, "title": "SRGAN", "icon": "2-circle"},
+    {"func": heatmap.app, "title": "SRCNN", "icon": "arrow-return-right"},
+    {"func": upload.app, "title": "SRGAN", "icon": "bi bi-arrow-return-right"},
 ]
 
 titles = [app["title"] for app in apps]
@@ -36,8 +41,7 @@ with st.sidebar:
     st.sidebar.title("About")
     st.sidebar.info(
         """
-        This web app is made using [Streamlit](https://streamlit.io/), for our
-        for the DL Ops Project.
+        This web app is made using [Streamlit](https://streamlit.io/), for our DL Ops Project.
     """
     )
 
