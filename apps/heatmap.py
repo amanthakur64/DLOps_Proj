@@ -56,14 +56,17 @@ a=SRCNN()
 # predict the high resolution image
 
 def preprocess_image(img_path):
-    img = cv2.imread(img_path,0)
-    # img = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)[:, :, 0]
-    img = cv2.resize(img, (64, 64), cv2.INTER_CUBIC)
-    img = img.astype('float32') / 255
-    # img = img.transpose(2, 0, 1)
-    img = np.expand_dims(img, axis=0)
-    img = torch.from_numpy(img)
-    return img
+    try:
+        img = cv2.imread(img_path,0)
+        # img = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)[:, :, 0]
+        img = cv2.resize(img, (64, 64), cv2.INTER_CUBIC)
+        img = img.astype('float32') / 255
+        # img = img.transpose(2, 0, 1)
+        img = np.expand_dims(img, axis=0)
+        img = torch.from_numpy(img)
+        return img
+    except Exception as e:
+        print(repr(e))
 
 # upload a low resolution image and a high resolution image
 low_res_image_path = "Bioimaging_data3\A0.3\\103064_0.3.jpg"
